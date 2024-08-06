@@ -656,5 +656,37 @@ const products = [
       "apparel",
       "mens"
     ]
+  },
+  {
+    id: "bc2847e9-5323-403f-b7cf-57fde044a956",
+    image: "images/products/backpack.jpg",
+    name: "School / Travel Backpack - Water Resistant",
+    rating: {
+      stars: 3.5,
+      count: 34
+    },
+    priceCents: 4999,
+    keywords: [
+      "backpack",
+      "school",
+      "fitness",
+      "mens"
+    ]
+  },
+  {
+    id: "bc2847e9-5323-403f-b7cf-57fde044a957",
+    image: "images/products/umbrella.jpg",
+    name: "Green Tactical Umbrella",
+    rating: {
+      stars: 4,
+      count: 239
+    },
+    priceCents: 497,
+    keywords: [
+      "winter",
+      "summer",
+      "rain",
+      "holiday"
+    ]
   }
 ];
