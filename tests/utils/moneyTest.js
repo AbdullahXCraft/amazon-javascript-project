@@ -16,4 +16,7 @@ describe('test suite: formatCurrency', () => {
   it('handles a lot of decimal digits', () => {
     expect(formatCurrency(1312.99999)).toEqual('13.13');
   });
+  it('handles negative numbers', () => {
+    expect(formatCurrency(-799)).toEqual('-7.99');
+  });
 });
