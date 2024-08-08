@@ -30,13 +30,18 @@ describe('test suite: renderCheckoutHeader', () => {
     renderOrderSummary();
   });
 
-  it('displays the header correctly', () => {
+  it('display the header correctly', () => {
     expect(document.querySelector('.js-checkout-cart-quantity').innerText).toContain('3 items');
   });
 
   it('update the header when deleting a product', () => {
+    document.querySelector(`.js-delete-link-${productId2}`).click();
+    expect(document.querySelector('.js-checkout-cart-quantity').innerText).toContain('2 items');
+  });
+
+  it('display the correct word for the cartQuantity', () => {
     document.querySelector(`.js-delete-link-${productId1}`).click();
-    expect(document.querySelector('.js-checkout-cart-quantity').innerText).toContain('1 items');
+    expect(document.querySelector('.js-checkout-cart-quantity').innerText).toContain('1 item');
   });
 
   afterEach(() => {
