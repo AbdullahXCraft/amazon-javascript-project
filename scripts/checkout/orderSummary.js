@@ -1,8 +1,6 @@
-import { cart, calculateCartQuantity, removeFromCart, updateQuantity, updateDeliveryOption } from "../../data/cart.js";
-import { products, getProduct } from "../../data/products.js";
+import { cart } from "../../data/cart-class.js";
+import { getProduct } from "../../data/products.js";
 import formatCurrency from "../utils/money.js";
-import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 import { renderCheckoutHeader } from "./checkoutHeader.js";
@@ -10,7 +8,7 @@ import { renderCheckoutHeader } from "./checkoutHeader.js";
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     const matchingProduct = getProduct(productId);
@@ -72,7 +70,7 @@ export function renderOrderSummary() {
     .forEach((link) => {
       link.addEventListener('click', () => {
         const productId = link.dataset.productId;
-        removeFromCart(productId);
+        cart.removeFromCart(productId);
         renderOrderSummary();
         renderPaymentSummary();
         renderCheckoutHeader();
@@ -108,7 +106,7 @@ export function renderOrderSummary() {
     .forEach((element) => {
       element.addEventListener('click', () => {
         const { productId, deliveryOptionId } = element.dataset;
-        updateDeliveryOption(productId, deliveryOptionId);
+        cart.updateDeliveryOption(productId, deliveryOptionId);
 
         renderOrderSummary();
         renderPaymentSummary();
@@ -155,11 +153,11 @@ function updateCartItemQuantity(productId) {
   const newQuantity = Number(newQuantityInput.value);
 
   if (newQuantity === 0) {
-    removeFromCart(productId);
+    cart.removeFromCart(productId);
   } else if (newQuantity < 0 || newQuantity >= 1000 || !newQuantity) {
     alert('New quantity must be between 0 and 1000');
   } else {
-    updateQuantity(productId, newQuantity);
+    cart.updateQuantity(productId, newQuantity);
   }
 
   renderCheckoutHeader();
