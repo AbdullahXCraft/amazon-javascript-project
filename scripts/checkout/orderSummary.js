@@ -75,6 +75,7 @@ export function renderOrderSummary() {
         removeFromCart(productId);
         renderOrderSummary();
         renderPaymentSummary();
+        renderCheckoutHeader();
       });
     });
 
