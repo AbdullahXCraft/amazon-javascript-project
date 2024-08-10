@@ -1,9 +1,16 @@
 import { cart } from '../data/cart-class.js';
-import { products, loadProducts } from '../data/products.js';
+import { products, loadProductsFetch } from '../data/products.js';
 
-loadProducts(renderProductsGrid);
+if (window.location.pathname === '/amazon.html') {
+  renderProductsGrid();
+}
 
-function renderProductsGrid() {
+async function renderProductsGrid() {
+  try {
+    await loadProductsFetch();
+  } catch (error) {
+    console.log('Unexpected error. Please try again later.');
+  }
 
   let productsHTML = '';
 
@@ -96,7 +103,7 @@ function updateAdded(productId) {
   }, 2000);
 }
 
-function updateCartQuantity() {
+export function updateCartQuantity() {
   const cartQuantity = cart.calculateCartQuantity();
   document.querySelector('.js-cart-quantity')
     .innerHTML = cartQuantity;
