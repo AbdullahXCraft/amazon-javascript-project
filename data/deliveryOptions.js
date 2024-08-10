@@ -34,9 +34,9 @@ export function calculateDeliveryDate(deliveryOption) {
   
   while (deliveryDays > 0) {
    deliveryDate = deliveryDate.add(1, 'days');
-   if (isWeekend(deliveryDate)) {
-    continue;
-   }
+   //if (isWeekend(deliveryDate)) {
+   // continue;
+   //}
    deliveryDays--;
   }
   

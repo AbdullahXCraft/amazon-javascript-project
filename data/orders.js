@@ -2,6 +2,7 @@ import formatCurrency from "../scripts/utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { getProduct, loadProductsFetch } from "./products.js";
 import { updateCartQuantity } from "../scripts/amazon.js";
+import { cart } from "./cart-class.js";
 
 if (window.location.pathname === '/orders.html') {
   renderOrdersGrid();
@@ -21,6 +22,37 @@ function saveToStorage() {
 function formatTime(time) {
   const dayjsTime = dayjs(time);
   return dayjsTime.format('MMMM D');
+}
+
+export function getOrder(orderId) {
+  let matchingOrder;
+  orders.forEach((order) => {
+    if (order.id === orderId) {
+      matchingOrder = order;
+    }
+  });
+  return matchingOrder;
+}
+
+export function getOrderProduct(orderId, productId) {
+  let matchingOrder;
+  orders.forEach((order) => {
+    if (order.id === orderId) {
+      matchingOrder = order;
+    }
+  });
+
+  let matchingProduct;
+
+  if (matchingOrder) {
+    matchingOrder.products.forEach((product) => {
+      if (product.productId === productId) {
+        matchingProduct = product;
+      }
+    })
+  }
+    
+  return matchingProduct;
 }
 
 async function renderOrdersGrid() {
@@ -57,7 +89,7 @@ async function renderOrdersGrid() {
         </div>
 
         <div class="order-details-grid">
-          ${generateOrderDetails(order.products)}
+          ${generateOrderDetails(order)}
         </div>
       </div>
     `;
@@ -65,11 +97,19 @@ async function renderOrdersGrid() {
 
   document.querySelector('.js-orders-grid')
     .innerHTML = ordersGridHTML || 'Looks like you have no placed orders yet.';
+
+  document.querySelectorAll('.js-buy-again-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const { productId, quantity } = button.dataset;
+      cart.addToCart(productId, Number(quantity));
+      window.location.href = '/checkout.html';
+    });
+  });
 }
 
-function generateOrderDetails(products) {
+function generateOrderDetails(order) {
   let orderDetailsHTML = '';
-
+  const products = order.products;
   products.forEach((productDetails) => {
     const product = getProduct(productDetails.productId);
     orderDetailsHTML += `
@@ -87,14 +127,14 @@ function generateOrderDetails(products) {
         <div class="product-quantity">
           Quantity: ${productDetails.quantity}
         </div>
-        <button class="buy-again-button button-primary">
+        <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${productDetails.productId}" data-quantity="${productDetails.quantity}">
           <img class="buy-again-icon" src="images/icons/buy-again.png">
           <span class="buy-again-message">Buy it again</span>
         </button>
       </div>
 
       <div class="product-actions">
-        <a href="tracking.html">
+        <a href="tracking.html?orderId=${order.id}&productId=${productDetails.productId}">
           <button class="track-package-button button-secondary">
             Track package
           </button>
